@@ -1,0 +1,13 @@
+com\dejot\bookstore\book\BookService.class
+com\dejot\bookstore\client\Client.class
+com\dejot\bookstore\loans\LoansController.class
+com\dejot\bookstore\book\BookRepository.class
+com\dejot\bookstore\client\ClientController.class
+com\dejot\bookstore\loans\LoansRepository.class
+com\dejot\bookstore\book\BookController.class
+com\dejot\bookstore\client\ClientRepository.class
+com\dejot\bookstore\BookstoreApplication.class
+com\dejot\bookstore\loans\Loans.class
+com\dejot\bookstore\loans\LoansService.class
+com\dejot\bookstore\book\Book.class
+com\dejot\bookstore\client\ClientService.class
