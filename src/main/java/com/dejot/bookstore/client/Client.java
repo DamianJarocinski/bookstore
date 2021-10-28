@@ -1,7 +1,5 @@
 package com.dejot.bookstore.client;
 
-import com.dejot.bookstore.loans.Loans;
-
 import javax.persistence.*;
 
 @Entity

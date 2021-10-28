@@ -26,7 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="c20fdb26-bce2-4190-9c87-9e82556b11bf">
-        <schema name="bookstore" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
+        <schema name="bookstore" object-types="table, view" />
       </connection>
     </loaded-nodes>
   </component>

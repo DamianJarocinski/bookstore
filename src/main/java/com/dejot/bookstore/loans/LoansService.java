@@ -24,7 +24,7 @@ public class LoansService {
     private BookService bookService;
 
     public List<Loans> getAllLoans() {
-        List<Loans> allLoans = new ArrayList<Loans>();
+        List<Loans> allLoans = new ArrayList<>();
         loansRepository.findAll().forEach(allLoans::add);
         return allLoans;
     }
@@ -34,7 +34,7 @@ public class LoansService {
     }
 
     public void addLoans(Loans loans) {
-        if (LoansService.isLoanAvailable(loans.getBook(), loans.getClient()) == false) {
+        if (!LoansService.isLoanAvailable(loans.getBook(), loans.getClient())) {
             System.out.println("Loan not available.");
         } else {
             //aktualizuje liczbe wypozyczen klienta
@@ -53,13 +53,19 @@ public class LoansService {
 
     public void updateLoans(Long id, Loans loans) {
         Loans tempLoans = new Loans();
-        tempLoans = loansRepository.findById(id).get();
-        tempLoans.setBook(loans.getBook());
-        tempLoans.setClient(loans.getClient());
-        tempLoans.setDateOfLoan(loans.getDateOfLoan());
-        tempLoans.setDateOfReturn(loans.getDateOfReturn());
-        tempLoans.setDateToReturn(loans.getDateToReturn());
-        loansRepository.save(tempLoans);
+        if (loansRepository.findById(id).isPresent()) {
+            tempLoans = loansRepository.findById(id).get();
+            tempLoans.setBook(loans.getBook());
+            tempLoans.setClient(loans.getClient());
+            tempLoans.setDateOfLoan(loans.getDateOfLoan());
+            tempLoans.setDateOfReturn(loans.getDateOfReturn());
+            tempLoans.setDateToReturn(loans.getDateToReturn());
+            loansRepository.save(tempLoans);
+        }
+        else {
+            System.out.println("Podano nieprawidłowe wartości. Aktualizacja danych nie udana.");
+        }
+
     }
 
     public void deleteLoans(Long id) {
@@ -67,37 +73,44 @@ public class LoansService {
     }
 
 
-    public Loans findByBookAndClient(Book book, Client client) {
-        return loansRepository.findByBookAndClient(book, client);
+    public Loans findByBookIdAndClientId(Long bookId, Long clientId) {
+        return loansRepository.findByBookIdAndClientId(bookId, clientId);
     }
 
     public static boolean isLoanAvailable(Book book, Client client) {
-        if (book.isAvailable() == true && client.getNumberOfBorrowedBooks() < 3) {
-            return true;
-        } else {
-            return false;
-        }
+        return book.isAvailable() && client.getNumberOfBorrowedBooks() < 3;
     }
 
-    public void returnBook(ObjectClientAndBookHolder objectClientAndBookHolder) {
-        Loans tempLoans = loansRepository.findByBookAndClient(objectClientAndBookHolder.book, objectClientAndBookHolder.client);
+    public void returnBook(ObjectBookAndClientHolder objectBookAndClientHolder) {
+        Loans tempLoans = loansRepository.findByBookAndClient(objectBookAndClientHolder.book, objectBookAndClientHolder.client);
         Calendar date = Calendar.getInstance();
         tempLoans.setDateOfReturn(date);
         loansRepository.save(tempLoans);
 
-        //aktualizuje liczbe wypozyczen klienta
-        Client tempClient = objectClientAndBookHolder.client;
+        //aktualizuje liczbe wypozyczen klienta (odejmuje)
+        Client tempClient = objectBookAndClientHolder.client;
         tempClient.setNumberOfBorrowedBooks(tempClient.getNumberOfBorrowedBooks() - 1);
         clientService.updateClient(tempClient.getId(), tempClient);
 
 
-        //aktualizuje status ksiazki
-        Book tempBook = objectClientAndBookHolder.book;
+        //aktualizuje status ksiazki (na dostepny)
+        Book tempBook = objectBookAndClientHolder.book;
         tempBook.setAvailable(true);
         bookService.updateBook(tempBook.getId(), tempBook);
 
+        //TODO: obsluga przedawnien
+        checkIfReturnIsOnTime(tempLoans);
+
     }
 
+        public boolean checkIfReturnIsOnTime(Loans loans) {
+            return loans.getDateToReturn().compareTo(loans.getDateOfReturn()) < 1;
+        }
 
 
+    public List<Loans> getAllLoansByClientId(Long clientId) {
+        List<Loans> allLoansByClientId = new ArrayList<>();
+        loansRepository.findAllByClientId(clientId).forEach(allLoansByClientId::add);
+        return allLoansByClientId;
+    }
 }

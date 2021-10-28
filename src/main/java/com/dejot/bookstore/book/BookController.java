@@ -42,4 +42,9 @@ public class BookController {
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }
+
+    @RequestMapping("/books/available")
+    public List<Book> getAllAvailableBooks() {
+       return bookService.getAllAvailableBooks();
+    }
 }

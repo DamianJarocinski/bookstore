@@ -1,11 +1,8 @@
 package com.dejot.bookstore.loans;
 
-import com.dejot.bookstore.book.Book;
-import com.dejot.bookstore.client.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -39,15 +36,22 @@ public class LoansController {
         loansService.deleteLoans(id);
     }
 
-    public Loans findByBookAndClient(Book book, Client client) {
-        return loansService.findByBookAndClient(book, client);
+
+    @RequestMapping("/loans/find/{bookId}/{clientId}")
+    public Loans findByBookIdAndClientId(@PathVariable Long bookId, @PathVariable Long clientId) {
+        return loansService.findByBookIdAndClientId(bookId, clientId);
+    }
+
+    @RequestMapping("/loans/client/{clientId}")
+    public List<Loans> getAllLoansByClientId(@PathVariable Long clientId) {
+        return loansService.getAllLoansByClientId(clientId);
     }
 
 
-    // do poprawy: dodac mozliwosc podania dateofreturn z body
+    //TODO: dodac mozliwosc podania dateofreturn z body
     @RequestMapping(method = RequestMethod.PUT, value = "/loans/return")
-    public void returnBook(@RequestBody ObjectClientAndBookHolder objectClientAndBookHolder) {
-        loansService.returnBook(objectClientAndBookHolder);
+    public void returnBook(@RequestBody ObjectBookAndClientHolder objectBookAndClientHolder) {
+        loansService.returnBook(objectBookAndClientHolder);
     }
 }
 

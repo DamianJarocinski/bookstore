@@ -1,6 +1,5 @@
 package com.dejot.bookstore.client;
 
-import com.dejot.bookstore.book.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

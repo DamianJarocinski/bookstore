@@ -2,7 +2,6 @@ package com.dejot.bookstore.loans;
 
 import com.dejot.bookstore.book.Book;
 import com.dejot.bookstore.client.Client;
-import com.dejot.bookstore.loans.LoansService;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -77,8 +76,6 @@ public class Loans {
 
     public Loans() {}
 
-
-
     public Loans(Long id, Book book, Client client, Calendar dateOfLoan, Calendar dateToReturn) {
 
             this.id = id;
@@ -86,7 +83,6 @@ public class Loans {
             this.client = client;
             this.dateOfLoan = dateOfLoan;
             this.dateToReturn = dateToReturn;
-
 
     }
 

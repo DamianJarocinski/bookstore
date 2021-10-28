@@ -48,4 +48,7 @@ public class BookService {
     }
 
 
+    public List<Book> getAllAvailableBooks() {
+        return bookRepository.findAllByIsAvailable(true);
+    }
 }
