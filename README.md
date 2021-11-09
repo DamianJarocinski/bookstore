@@ -1,2 +1,2 @@
 # bookstore
-simple bookstore app for training purposes
+simple bookstore app (without frontend) for training purposes, 
